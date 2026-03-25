@@ -14,20 +14,43 @@
 
 \usepackage{longtable}
 \usepackage{array}
+\usepackage{xparse}
+\usepackage{expl3}
 
-\newcommand{\formline}[1]{\rule{#1}{0.15mm}}
-\newcommand{\tablerow}{\rule{0pt}{1cm} & & \\ \hline}
+\pagestyle{empty}
 
-\newcommand{\generaterows}[1]{%
-  \ifnum#1>0
-    \tablerow
-    \expandafter\generaterows\expandafter{\number\numexpr#1-1\relax}
-  \fi
+\setlength{\LTpre}{0pt}
+\setlength{\LTpost}{0pt}
+
+\ExplSyntaxOn
+
+\int_new:N \l__att_rows_int
+\int_set:Nn \l__att_rows_int {88}
+
+\tl_new:N \g_att_table_body_tl
+
+\cs_new_protected:Nn \__att_generate_rows:{
+  \tl_gclear:N \g_att_table_body_tl
+  \int_step_inline:nn { \l__att_rows_int }
+  {
+    \tl_gput_right:Nn \g_att_table_body_tl{ \rule{0pt}{1.1cm} & & \\ \hline }
+  }
 }
+
+\NewDocumentCommand{\printAttendanceRows}{}{
+  \tl_use:N \g_att_table_body_tl
+}
+
+\NewDocumentCommand{\formline}{m}{
+  \rule{#1}{0.15mm}
+}
+
+\__att_generate_rows:
+
+\ExplSyntaxOff
 
 \newcommand{\attendanceTitle}{%
   {\huge\bfseries ПРИСЪСТВЕН СПИСЪК}
-
   \vspace{1cm}
   \Large
 
@@ -65,25 +88,18 @@
 }
 
 \begin{document}
-\pagestyle{empty}
 
 \begin{center}
   \attendanceTitle
 \end{center}
 
 \Large
-\renewcommand{\arraystretch}{1.5}
+\renewcommand{\arraystretch}{1.3}
 
-\begin{longtable}{|
->{\centering\arraybackslash}p{5cm}|
->{\centering\arraybackslash}p{8cm}|
->{\centering\arraybackslash}p{3cm}|
-}
-
+\begin{longtable}{|>{\centering\arraybackslash}p{5cm}|>{\centering\arraybackslash}p{8cm}|>{\centering\arraybackslash}p{3cm}|}
 \attendanceHeader
 \endhead
-
-\generaterows{93}
-
+\printAttendanceRows
 \end{longtable}
+
 \end{document}
