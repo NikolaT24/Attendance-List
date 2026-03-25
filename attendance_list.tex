@@ -1,54 +1,74 @@
 \documentclass{article}
+
 \usepackage[T2A]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[bulgarian]{babel}
+
 \usepackage[
-left=1.5cm,
-right=1.5cm,
-top=1cm,
-bottom=1.7cm,
-a4paper
+  a4paper,
+  left=1.5cm,
+  right=1.5cm,
+  top=1cm,
+  bottom=1.7cm
 ]{geometry}
+
 \usepackage{longtable}
 \usepackage{array}
 
-\newcommand{\emptyrow}{\rule{0pt}{1cm} & & \\}
+\newcommand{\formline}[1]{\rule{#1}{0.15mm}}
+\newcommand{\tablerow}{\rule{0pt}{1cm} & & \\ \hline}
 
-\newcommand{\makerows}[1]{%
+\newcommand{\generaterows}[1]{%
   \ifnum#1>0
-    \emptyrow \hline   \expandafter\makerows\expandafter{\number\numexpr#1-1\relax}%
+    \tablerow
+    \expandafter\generaterows\expandafter{\number\numexpr#1-1\relax}
   \fi
+}
+
+\newcommand{\attendanceTitle}{%
+  {\huge\bfseries ПРИСЪСТВЕН СПИСЪК}
+
+  \vspace{1cm}
+  \Large
+
+  От проведено допълнително обучение по: \textbf{\formline{7.6cm}} \\
+  \textbf{\formline{17cm}}
+
+  \vspace{0.7cm}
+
+  За студентите от \textbf{курс на специалност}
+  \textit{„Софтуерно инженерство“}
+
+  \vspace{0.7cm}
+
+  Дата: \textbf{\formline{2cm}} \hspace{0.5cm}
+  Зала: \textbf{\formline{2cm}}
+
+  \vspace{0.5cm}
+
+  Начало: \textbf{\formline{2cm}} \hspace{1cm}
+  Край: \textbf{\formline{2cm}}
+
+  \vspace{0.5cm}
+
+  Преподавател: \textbf{\formline{8cm}}
+
+  \vspace{0.5cm}
+}
+
+\newcommand{\attendanceHeader}{%
+  \hline
+  \textbf{Факултетен номер} &
+  \textbf{Две имена} &
+  \textbf{Подпис} \\
+  \hline
 }
 
 \begin{document}
 \pagestyle{empty}
 
 \begin{center}
-{\huge\bfseries ПРИСЪСТВЕН СПИСЪК}
-
-\Large
-\vspace{1cm}
-
-От проведено допълнително обучение по: \textbf{\rule{7.6cm}{0.15mm}} \\
-\textbf{\rule{17cm}{0.15mm}}
-
-\vspace{0.7cm}
-
-За студентите от \textbf{курс на специалност} \textit{„Софтуерно инженерство“}
-
-\vspace{0.7cm}
-
-Дата: \textbf{\rule{2cm}{0.15mm}}; \hspace{0.5cm} Зала: \textbf{\rule{2cm}{0.15mm}}
-
-\vspace{0.5cm}
-
-Начало: \textbf{\rule{2cm}{0.15mm}}; \hspace{1cm} Край: \textbf{\rule{2cm}{0.15mm}}
-
-\vspace{0.5cm}
-
-Преподавател: \textbf{\rule{8cm}{0.15mm}}
-
-\vspace{0.5cm}
+  \attendanceTitle
 \end{center}
 
 \Large
@@ -60,14 +80,10 @@ a4paper
 >{\centering\arraybackslash}p{3cm}|
 }
 
-\hline
-\textbf{Факултетен номер} & \textbf{Две имена} & \textbf{Подпис} \\
-\hline
-
+\attendanceHeader
 \endhead
 
-\makerows{93} 
+\generaterows{93}
 
 \end{longtable}
-
 \end{document}
